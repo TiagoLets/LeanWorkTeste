@@ -88,11 +88,11 @@ export default function CadastroPage() {
           />
 
           <InputMask mask="999.999.999-99" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCpf(e.target.value)} >
-            {(inputProps: any) => <Input id="cpf" type="text" name="cpf" label="CPF" {...inputProps} />}
+            {(inputProps: React.ReactNode) => <Input id="cpf" type="text" name="cpf" label="CPF" {...inputProps} />}
           </InputMask>
 
           <InputMask mask="(99) 99999-9999" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}>
-            {(inputProps: any) => <Input id="phone" type="text" name="phone" label="Telefone" {...inputProps} />}
+            {(inputProps: React.ReactNode) => <Input id="phone" type="text" name="phone" label="Telefone" {...inputProps} />}
           </InputMask>
 
           <Bottom>
