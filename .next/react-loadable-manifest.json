@@ -1,8 +1,1 @@
-{
-  "..\\src\\validators\\User.ts -> yup": {
-    "id": "./node_modules/yup/es/index.js",
-    "files": [
-      "static/chunks/node_modules_yup_es_index_js.js"
-    ]
-  }
-}
+{}

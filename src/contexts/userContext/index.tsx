@@ -11,16 +11,17 @@ const initialState: UserState = {
     users: [],
 };
 
-function Actions(State: UserState, Action: UserAction): UserState {
-    const payload = Action.payload
+function reducer(state: UserState, action: UserAction): UserState {
+    const payload = action.payload
 
     function storeData(value: User[]) {
         localStorage.setItem('storage_users', JSON.stringify(value))
     }
 
-    switch (Action.type) {
+    switch (action.type) {
         case 'NewUser':
-            const newListUsers: User[] = [payload as User, ...State.users]
+            const newListUsers: User[] = [payload as User, ...state.users]
+            
             storeData(newListUsers)
 
             return {
@@ -28,17 +29,12 @@ function Actions(State: UserState, Action: UserAction): UserState {
             }
         case 'DeleteUser':
 
-            const listClone = State.users
-            listClone.splice(payload as number, 1) // O(n)
+            const newUserList = state.users.filter((user: User) => user.cpf !==  (payload as string))
 
-            // const deleteItemList = State.users.filter((userStorage: User) => { // O(n²)
-            //     return userStorage.cpf !== (payload as User).cpf
-            // })
-
-            storeData(listClone)
+            storeData(newUserList)
 
             return {
-                users: listClone,
+                users: newUserList,
             };
         case 'GetUsers':
             return {
@@ -46,7 +42,7 @@ function Actions(State: UserState, Action: UserAction): UserState {
             };
 
         default:
-            return State;
+            return state;
     }
 }
 
@@ -54,10 +50,10 @@ export const UsersContext = createContext<{ state: UserState; dispatch: Dispatch
 
 export function UserProvider({ children }: ProvidersProps) {
 
-    const [state, dispatch] = useReducer(Actions, initialState)
+    const [state, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
-        const jsonValue = localStorage.getItem('storage_users')
+        const jsonValue = localStorage.getItem('storage_users') 
         const users: User[] = jsonValue && jsonValue.length > 0 ? JSON.parse(jsonValue) : [];
 
         dispatch(

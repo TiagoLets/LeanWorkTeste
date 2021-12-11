@@ -1,5 +1,6 @@
 
 import { User } from 'src/interfaces/user';
+import * as  Yup from 'yup'
 
  interface ValidateResult {
     ok: boolean;
@@ -30,20 +31,29 @@ export function validateCpf(cpf: string): boolean {
 }
 
 export async function validateUser(user: User): Promise<ValidateResult> {
-    const Yup = await import('yup');
 
     const validationErrors: Record<string, string> = {};
 
     const schema = Yup.object().shape({
-        name: Yup.string().required('Por favor, digite seu nome.'),
-        email: Yup.string().email('Por favor, digite um email válido.').required('Por favor, digite seu e-mail.'),
-        phone: Yup.string()
-          .matches(
-            /(\(\d{2}\) \d\d{4}-\d{4})/,
-            'Digite um Telefone válido.',
-          ).required('Por favor, digite um telefone.'),
-        cpf: Yup.string().required('Por favor, digite o seu cpf.')
-        .test('verifyCPF', 'Por favor digite um cpf válido.', value => validateCpf(value?.replaceAll('-', '').replaceAll('.', '') as string)),
+        name: Yup
+            .string()
+            .required('Por favor, digite seu nome.'),
+        email: Yup
+            .string()
+            .email('Por favor, digite um email válido.')
+            .required('Por favor, digite seu e-mail.'),
+        phone: Yup
+            .string()
+            .matches(
+                /(\(\d{2}\) \d\d{4}-\d{4})/,
+                'Digite um Telefone válido.',
+            ).required('Por favor, digite um telefone.'),
+        cpf: Yup
+            .string()
+            .required('Por favor, digite o seu cpf.')
+            .test('verifyCPF', 'Por favor digite um cpf válido.', value => 
+                validateCpf(value?.replaceAll('-', '')
+                .replaceAll('.', '') as string)),
       })
 
     try {

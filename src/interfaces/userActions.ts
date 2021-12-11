@@ -1,19 +1,6 @@
 import { User } from 'src/interfaces/user'
 
-export type UserAction =
-    |
-        {
-            type: 'GetUsers',
-            payload: User[]
-        }
-    |
-        {
-            type: 'NewUser',
-            payload: User,
-        }
-    |
-        {
-            type: 'DeleteUser';
-            payload: number,
-        };
-;
+export type UserAction = {
+        type: 'GetUsers' | 'NewUser' | 'DeleteUser',
+        payload:  User[] | string | User
+};

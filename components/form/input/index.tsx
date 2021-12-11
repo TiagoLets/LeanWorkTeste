@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useField } from '@unform/core';
-import styled from 'styled-components'
+import { InputContainer } from './styles'
 
 type InputProps = {
     id: string
@@ -29,44 +29,8 @@ export default function Input({ id, name, type, label, ...rest }: InputProps) {
 
             <input id={id}  defaultValue={defaultValue} ref={inputRef} {...rest} />
 
-            {error && <span className="error-message">{error}</span>}
+            {error && <span className="error-message" data-cy={`error-message-${id}`}>{error}</span>}
         </InputContainer>
     );
 }
 
-const InputContainer = styled.div`
-    margin-bottom: 40px;
-    
-    input {
-        display: flex;
-        height: 35px;
-        border-width: 0 0 1px 0;
-        border-style: solid;
-        border-color: #dbdbdb;
-        width: 100%;
-        color: #efeeed;
-
-        &:focus {
-            color: #555555;
-        }
-    }
-
-    label {
-        color: #999999;
-        margin-bottom: 5px;
-    }
-
-    .error-message {
-        color: #A91919;
-        font-size: 0.85rem;
-    }
-
-    @media only screen and (max-width: 865px) {
-        label {
-        margin-bottom: 3px;
-        }
-        input {
-        height: 25px;
-        }
-    }
-`

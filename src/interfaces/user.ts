@@ -3,5 +3,4 @@ export interface User {
     email: string,
     cpf: string,
     phone: string,
-    userIndex?: number
 }
