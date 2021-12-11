@@ -20,30 +20,31 @@ describe('Cadastro', () => {
     cy.get('#phone').should('be.visible')
   })
 
-  it('Validar erros input', () => {
-    cy.contains('Cadastrar').click()
-    cy.get('.error-message').eq(0).should('contain', 'Por favor, digite seu nome.')
-    cy.get('.error-message').eq(1).should('contain', 'Por favor, digite seu e-mail.')
-    cy.get('.error-message').eq(2).should('contain', 'Por favor, digite o seu cpf.')
-    cy.get('.error-message').eq(3).should('contain', 'Por favor, digite um telefone.')
-  })
-
   it('Deve recusar um email inválido', () => {
-    cy.get('#email').type('testeInvalido')
+    cy.get('#name').type('João')
+    cy.get('#email').type('teste@')
+    cy.get('#cpf').type('38153725009')
+    cy.get('#phone').type('43999999999')
     cy.contains('Cadastrar').click()
-    cy.get('.error-message').eq(1).should('contain', 'Por favor, digite um email válido.')
+    cy.get('.error-message').eq(0).should('contain', 'Por favor, digite um email válido.')
   })
 
   it('Deve recusar um cpf inválido', () => {
-    cy.get('#cpf').type('12121212121')
+    cy.get('#name').type('João')
+    cy.get('#email').type('teste@gmail.com')
+    cy.get('#cpf').type('11111111111')
+    cy.get('#phone').type('43999999999')
     cy.contains('Cadastrar').click()
-    cy.get('.error-message').eq(2).should('contain', 'Por favor digite um cpf válido.')
+    cy.get('.error-message').eq(0).should('contain', 'Por favor digite um cpf válido.')
   })
 
   it('Deve recusar um telefone inválido', () => {
+    cy.get('#name').type('João')
+    cy.get('#email').type('teste@gmail.com')
+    cy.get('#cpf').type('05522657057')
     cy.get('#phone').type('1231231231')
     cy.contains('Cadastrar').click()
-    cy.get('.error-message').eq(3).should('contain', 'Digite um Telefone válido.')
+    cy.get('.error-message').eq(0).should('contain', 'Digite um Telefone válido.')
   })
 
   it('Deve cadastrar um usuário', () => {
@@ -84,6 +85,6 @@ describe('Listagem', () => {
 
   it('Deve apagar e apresentar o empty state', () => {
     cy.get('#list-users > div').eq(0).find('.excluir').click()
-    cy.get('p').should('contain', 'Nada por aqui ;(')
+    cy.get('p').should('contain', 'Nenhum cadastro registrado')
   })
 })

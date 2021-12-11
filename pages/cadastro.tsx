@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useState, useEffect } from 'react';
 import styled from 'styled-components'
 
 //Next
@@ -27,61 +27,87 @@ import { UsersContext } from 'src/contexts/userContext'
 import { validateUser } from 'src/validators/User';
 
 export default function CadastroPage() {
-  const router = useRouter();
-  const formRef = useRef<FormHandles>(null);
-  const { state, dispatch } = useContext(UsersContext);
+  const router = useRouter()
+    , formRef = useRef<FormHandles>(null)
+    , { state, dispatch } = useContext(UsersContext)
+    , [nameInput, setName] = useState('')
+    , [emailInput, setEmail] = useState('')
+    , [phoneInput, setPhone] = useState('')
+    , [cpfInput, setCpf] = useState('')
+    , [buttonStateDisabled, setDisabled] = useState(true)
 
   async function handleSubmit(user: User) {
-      const validationResult = await validateUser(user)
-      
-      if(!validationResult.ok){
-        formRef.current?.setErrors(validationResult.fields);
-      }else{
-        formRef.current?.setErrors({});
-        const userExist = state.users.find((cadastro: User) => cadastro.cpf === user.cpf);
+    const validationResult = await validateUser(user)
 
-        if (!userExist) {
-          dispatch?.({ type: 'NewUser', payload: user })
-          router.replace('/');
-        } else {
-          formRef.current?.setFieldError('cpf', 'Cpf já cadastrado')
-        }
+    if (!validationResult.ok) {
+      formRef.current?.setErrors(validationResult.fields);
+    } else {
+      formRef.current?.setErrors({});
+      const userExist = state.users.find((cadastro: User) => cadastro.cpf === user.cpf);
+
+      if (!userExist) {
+        dispatch?.({ type: 'NewUser', payload: user })
+        router.replace('/');
+      } else {
+        formRef.current?.setFieldError('cpf', 'Cpf já cadastrado')
       }
+    }
   };
 
+  useEffect(() => {
+    if (nameInput && emailInput && cpfInput && phoneInput) {
+      setDisabled(false)
+    } else {
+      setDisabled(true)
+    }
+
+  }, [nameInput, emailInput, cpfInput, phoneInput])
+
   return (
-      <FlexContainer>
-        <Background />
+    <FlexContainer>
+      <Background />
 
-        <Registration>
-          <h1 className="animate__animated animate__fadeInDown">Lean Cadastro</h1>
+      <Registration>
+        <h1 className="animate__animated animate__fadeInDown">Lean Cadastro</h1>
 
-            <Form method="post" ref={formRef} onSubmit={handleSubmit} className="animate__animated animate__fadeInRight ">
-              <Input id="name" type="text" name="name" label="Nome Completo" />
+        <Form method="post" ref={formRef} onSubmit={handleSubmit} className="animate__animated animate__fadeInRight ">
+          <Input
+            id="name"
+            type="text"
+            name="name"
+            label="Nome Completo"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+          />
 
-              <Input id="email" type="email" name="email" label="E-mail" />
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            label="E-mail"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          />
 
-              <InputMask mask="999.999.999-99">
-                {(inputProps: any) => <Input id="cpf" type="text" name="cpf" label="CPF" {...inputProps} />}
-              </InputMask>
+          <InputMask mask="999.999.999-99" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCpf(e.target.value)} >
+            {(inputProps: any) => <Input id="cpf" type="text" name="cpf" label="CPF" {...inputProps} />}
+          </InputMask>
 
-              <InputMask mask="(99) 99999-9999">
-                {(inputProps: any) => <Input id="phone" type="text" name="phone" label="Telefone" {...inputProps} />}
-              </InputMask>
+          <InputMask mask="(99) 99999-9999" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}>
+            {(inputProps: any) => <Input id="phone" type="text" name="phone" label="Telefone" {...inputProps} />}
+          </InputMask>
 
-              <Bottom>
-                <Button type="submit" disabled={false} text="Cadastrar" />
+          <Bottom>
+            <Button type="submit" disabled={buttonStateDisabled} text="Cadastrar" />
 
-                <Link href="/">
-                  <a>
-                    Home
-                    <img src="/images/right-arrow.png" />
-                  </a>
-                </Link>
-              </Bottom>
-            </Form>
-        </Registration >
-      </FlexContainer>
+            <Link href="/">
+              <a>
+                Home
+                <img src="/images/right-arrow.png" />
+              </a>
+            </Link>
+          </Bottom>
+        </Form>
+      </Registration >
+    </FlexContainer>
   )
 };
 
@@ -161,7 +187,7 @@ const Registration = styled.div`
   }
 `
 
-const Bottom = styled.div `
+const Bottom = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;

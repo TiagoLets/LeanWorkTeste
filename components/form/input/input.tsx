@@ -7,6 +7,7 @@ type InputProps = {
     name: string 
     type: string
     label: string
+    onChange?(e: React.ChangeEvent<HTMLInputElement>): void
 }
 
 export default function Input({ id, name, type, label, ...rest }: InputProps) {

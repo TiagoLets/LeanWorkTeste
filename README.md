@@ -2,12 +2,6 @@
 # LeanWork Teste Tiago Dias Maciel
 
 
-![GitHub repo size](https://github.com/TiagoLets/LeanWorkTeste)
-
-
-<img src="/readme-project-image.png">
-
-
 ### Sobre
 
 Teste para uma vaga de front-end na empresa LeanWork simulando um CRUD em local storage.
