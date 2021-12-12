@@ -15,7 +15,7 @@ export default function HomePage() {
 
       <ListRegisters id="list-users">
         {
-          state.users.length > 0 && state.users.map(({ cpf, email, phone, name }, userIndex) =>
+          state.users.length > 0 && state.users.map(({ cpf, email, phone, name }) =>
             <Card
               key={cpf}
               name={name}
