@@ -3,17 +3,17 @@ import { UsersContext } from 'src/contexts/userContext'
 import { User } from 'src/interfaces/user'
 import { CardStyle } from './styles'
 
-export function Card(user: User) {
-    const phoneFormatted = user.phone ? parseInt(user.phone.replace(/[^0-9\.]+/g, "")) : ''
+export function Card({ phone, name , cpf , email }: User) {
+    const phoneFormatted = phone ? parseInt(phone.replace(/[^0-9\.]+/g, "")) : ''
     const { dispatch, state } = useContext(UsersContext);
 
-    const userIndex = state.users.findIndex(item => item.cpf === user.cpf)
+    const userIndex = state.users.findIndex(item => item.cpf === cpf)
 
     function deleteUser() {
         dispatch(
             {
                 type: 'DeleteUser',
-                payload: user.cpf
+                payload: cpf
             }
         )
     }
@@ -22,26 +22,26 @@ export function Card(user: User) {
         <CardStyle userIndex={userIndex} data-cy="userCard">
             <div className="properties">
                 <span>Nome:</span>
-                <span>{user.name}</span>
+                <span>{name}</span>
             </div>
 
             <div className="properties">
                 <span>Email:</span>
-                <a href={`mailto:${user.email}`}>
-                    <span>{user.email}</span>
+                <a href={`mailto:${email}`}>
+                    <span>{email}</span>
                 </a>
             </div>
 
             <div className="properties">
                 <span>Telefone:</span>
                 <a href={`tel:${phoneFormatted}`}>
-                    <span>{user.phone}</span>
+                    <span>{phone}</span>
                 </a>
             </div>
 
             <div className="properties">
                 <span>CPF:</span>
-                <span className="cpf">{user.cpf}</span>
+                <span className="cpf">{cpf}</span>
             </div>
 
             <div className="delete" data-cy="deleteButton" onClick={deleteUser}>
