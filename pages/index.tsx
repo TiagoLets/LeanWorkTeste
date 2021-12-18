@@ -1,12 +1,11 @@
 import "animate.css";
 import { Card } from 'components/elements/card';
-import { useContext } from 'react'
-import { UsersContext } from 'src/contexts/userContext'
+import { useUsers } from 'src/contexts/userContext'
 import { Button } from 'components/elements/button';
 import { ListingContainer , ListRegisters , DefaultText } from 'styles/pages/home'
 
 export default function HomePage() {
-  const { state } = useContext(UsersContext);
+  const { state } = useUsers();
 
   return (
     <ListingContainer>

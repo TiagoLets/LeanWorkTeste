@@ -1,11 +1,11 @@
 import { useContext } from 'react'
-import { UsersContext } from 'src/contexts/userContext'
+import { useUsers } from 'src/contexts/userContext'
 import { User } from 'src/interfaces/user'
 import { CardStyle } from './styles'
 
 export function Card({ phone, name , cpf , email }: User) {
     const phoneFormatted = phone ? parseInt(phone.replace(/[^0-9\.]+/g, "")) : ''
-    const { dispatch, state } = useContext(UsersContext);
+    const { dispatch, state } = useUsers();
 
     const userIndex = state.users.findIndex(item => item.cpf === cpf)
 

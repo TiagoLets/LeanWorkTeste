@@ -1,4 +1,4 @@
-import { useReducer, createContext, ReactNode, useEffect, Dispatch } from 'react'
+import { useReducer, createContext, ReactNode, useEffect, Dispatch , useContext} from 'react'
 import { User } from 'src/interfaces/user'
 import { UserAction } from 'src/interfaces/userActions'
 
@@ -21,7 +21,7 @@ function reducer(state: UserState, action: UserAction): UserState {
     switch (action.type) {
         case 'NewUser':
             const newListUsers: User[] = [payload as User, ...state.users]
-            
+
             storeData(newListUsers)
 
             return {
@@ -29,7 +29,7 @@ function reducer(state: UserState, action: UserAction): UserState {
             }
         case 'DeleteUser':
 
-            const newUserList = state.users.filter((user: User) => user.cpf !==  (payload as string))
+            const newUserList = state.users.filter((user: User) => user.cpf !== (payload as string))
 
             storeData(newUserList)
 
@@ -40,20 +40,22 @@ function reducer(state: UserState, action: UserAction): UserState {
             return {
                 users: payload as User[],
             };
-
-        default:
-            return state;
+        default: {
+            throw new Error(`Unhandled action type: ${action.type}`)
+        }
     }
 }
 
-export const UsersContext = createContext<{ state: UserState; dispatch: Dispatch<UserAction>; }>({ state: initialState, dispatch: () => null });
+// const UsersContext = createContext<{ state: UserState; dispatch: Dispatch<UserAction> } | undefined>({ state: initialState, dispatch: () => null });
 
-export function UserProvider({ children }: ProvidersProps) {
+const UsersContext = createContext<{ state: UserState; dispatch: Dispatch<UserAction> } | undefined>(undefined);
+
+function UserProvider({ children }: ProvidersProps) {
 
     const [state, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
-        const jsonValue = localStorage.getItem('storage_users') 
+        const jsonValue = localStorage.getItem('storage_users')
         const users: User[] = jsonValue && jsonValue.length > 0 ? JSON.parse(jsonValue) : [];
 
         dispatch(
@@ -70,3 +72,14 @@ export function UserProvider({ children }: ProvidersProps) {
         </UsersContext.Provider>
     )
 }
+
+function useUsers() {
+    const context = useContext(UsersContext)
+    
+    if (context === undefined) {
+      throw new Error('useCount must be used within a CountProvider')
+    }
+    return context
+  }
+  
+  export { UserProvider , useUsers }

@@ -16,14 +16,14 @@ import InputMask from "react-input-mask";
 
 import { User } from 'src/interfaces/user';
 
-import { UsersContext } from 'src/contexts/userContext'
+import { useUsers } from 'src/contexts/userContext'
 
 import { validateUser  } from 'src/validators/User';
 
 export default function CadastroPage() {
   const router = useRouter()
       , formRef = useRef<FormHandles>(null)
-      , { state, dispatch } = useContext(UsersContext)
+      , { state, dispatch } = useUsers()
       , [nameInput, setName] = useState('')
       , [emailInput, setEmail] = useState('')
       , [phoneInput, setPhone] = useState('')
